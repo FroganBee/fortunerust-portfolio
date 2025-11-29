@@ -1,8 +1,30 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Icon } from '@iconify/react'
 
 const TechStack = () => {
   const [activeCategory, setActiveCategory] = useState('Frontend')
+  const [hoveredTech, setHoveredTech] = useState<number | null>(null)
+  const [animatingTech, setAnimatingTech] = useState<number | null>(null)
+
+  // Reset hover state when category changes
+  useEffect(() => {
+    setHoveredTech(null)
+    setAnimatingTech(null)
+  }, [activeCategory])
+
+  const handleMouseEnter = (index: number) => {
+    setHoveredTech(index)
+    setAnimatingTech(null)
+    // Reset to 0% first, then animate
+    setTimeout(() => {
+      setAnimatingTech(index)
+    }, 50)
+  }
+
+  const handleMouseLeave = () => {
+    setHoveredTech(null)
+    setAnimatingTech(null)
+  }
 
   const categories = [
     'Frontend',
@@ -95,28 +117,40 @@ const TechStack = () => {
 
         {/* Technology Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-          {technologies[activeCategory as keyof typeof technologies]?.map((tech, index) => (
-            <div key={index} className="text-center group">
-              {/* Icon */}
-              <div className="w-16 h-16 mx-auto mb-4 bg-dark-800 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-200">
-                <Icon icon={tech.icon} className="w-8 h-8" />
+          {technologies[activeCategory as keyof typeof technologies]?.map((tech, index) => {
+            const isHovered = hoveredTech === index
+            
+            return (
+              <div 
+                key={index} 
+                className="text-center group cursor-pointer"
+                onMouseEnter={() => handleMouseEnter(index)}
+                onMouseLeave={handleMouseLeave}
+              >
+                {/* Icon */}
+                <div className={`w-16 h-16 mx-auto mb-4 bg-dark-800 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-200 ${isHovered ? 'animate-shake' : ''}`}>
+                  <Icon icon={tech.icon} className="w-8 h-8" />
+                </div>
+                
+                {/* Name */}
+                <h3 className="text-white font-medium mb-3">{tech.name}</h3>
+                
+                {/* Progress Bar */}
+                <div className="w-full bg-dark-700 rounded-full h-1 mb-2 overflow-hidden">
+                  <div 
+                    className="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full"
+                    style={{ 
+                      width: animatingTech === index ? `${tech.progress}%` : isHovered ? '0%' : `${tech.progress}%`,
+                      transition: animatingTech === index ? 'width 0.7s ease-out' : isHovered ? 'width 0s' : 'width 0.3s ease-in'
+                    }}
+                  ></div>
+                </div>
+                
+                {/* Progress Percentage */}
+                <span className="text-sm text-gray-400">{tech.progress}%</span>
               </div>
-              
-              {/* Name */}
-              <h3 className="text-white font-medium mb-3">{tech.name}</h3>
-              
-              {/* Progress Bar */}
-              <div className="w-full bg-dark-700 rounded-full h-1 mb-2">
-                <div 
-                  className="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full transition-all duration-500"
-                  style={{ width: `${tech.progress}%` }}
-                ></div>
-              </div>
-              
-              {/* Progress Percentage */}
-              <span className="text-sm text-gray-400">{tech.progress}%</span>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </section>

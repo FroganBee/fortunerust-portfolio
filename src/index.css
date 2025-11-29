@@ -84,6 +84,31 @@
   .animate-lean-wave8 {
     animation: leanWave8 0.8s ease-in-out;
   }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in forwards;
+    opacity: 0;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .animate-shake {
+    animation: shake 0.5s ease-in-out;
+  }
 }
 
 @keyframes testBounce {
@@ -205,3 +230,48 @@
     transform: translateY(-4px) rotate(1deg);
   }
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+  }
+  10% {
+    transform: translateX(-2px) translateY(-1px) rotate(-2deg);
+  }
+  20% {
+    transform: translateX(2px) translateY(1px) rotate(2deg);
+  }
+  30% {
+    transform: translateX(-1px) translateY(1px) rotate(-1deg);
+  }
+  40% {
+    transform: translateX(1px) translateY(-1px) rotate(1deg);
+  }
+  50% {
+    transform: translateX(-1px) translateY(0) rotate(-1deg);
+  }
+  60% {
+    transform: translateX(1px) translateY(0) rotate(1deg);
+  }
+  70% {
+    transform: translateX(-1px) translateY(0) rotate(-0.5deg);
+  }
+  80% {
+    transform: translateX(1px) translateY(0) rotate(0.5deg);
+  }
+  90% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+  }
+}
+
